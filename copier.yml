@@ -1,0 +1,68 @@
+# devkit: lint and release tasks for my projects, mise pins the tools, hk runs the checks.
+# New project: uvx copier copy --trust gh:hiqdev/devkit .   Later: uvx copier update --trust
+
+_subdirectory: template
+_templates_suffix: .jinja
+# hk and mise use {{ }} themselves, so the template marks its own with [[ ]] and [% %]
+_envops:
+  block_start_string: "[%"
+  block_end_string: "%]"
+  variable_start_string: "[["
+  variable_end_string: "]]"
+  comment_start_string: "[#"
+  comment_end_string: "#]"
+  keep_trailing_newline: true
+# the project's own: written once, never overwritten
+_skip_if_exists:
+  - mise.toml
+  - hk.pkl
+  - .markdownlint.yaml
+  - .vale/styles/config/vocabularies/Wiki/accept.txt
+_message_after_copy: |
+  Next: mise trust && mise install && mise run lint, then mise run hooks for the pre-commit hook.
+
+vault:
+  type: str
+  default: "."
+  help: Folder uwiki checks as the vault, from the project root
+
+uwiki:
+  type: str
+  default: "0.30.1"
+  help: uwiki release the checks run, or checkout in uwiki's own repo to run its .venv
+
+ci:
+  type: str
+  default: github
+  choices: [github, none]
+  help: CI that runs mise run lint
+
+releases:
+  type: str
+  default: none
+  choices: [none, python]
+  help: "python: patch, minor, major tag the version of a Python package; release pushes it; up installs it"
+
+version_file:
+  type: str
+  default: src/[[ _folder_name ]]/__init__.py
+  when: "[[ releases == 'python' ]]"
+  help: File holding __version__ = "X.Y.Z"
+
+package:
+  type: str
+  default: pipx:hiqsol/[[ _folder_name ]]
+  when: "[[ releases == 'python' ]]"
+  help: mise package of a release, up installs it
+
+command:
+  type: str
+  default: "[[ _folder_name ]]"
+  when: "[[ releases == 'python' ]]"
+  help: Command the package installs, up checks its --version
+
+branch:
+  type: str
+  default: master
+  when: "[[ releases == 'python' ]]"
+  help: Branch release pushes with the tag

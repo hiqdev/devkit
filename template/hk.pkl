@@ -1,0 +1,12 @@
+// This project's lint for hk: devkit's steps (.config/devkit/hk-steps.pkl) and its own, hk settings.
+// devkit writes it once and leaves it to the project.
+amends ".config/devkit/hk-config.pkl"
+import ".config/devkit/hk-steps.pkl" as devkit
+
+fail_fast = false                         // report what every step finds, not the first one only
+// exclude = List("tests/fixtures/**")    // files no step takes
+
+hooks = devkit.hooks((devkit.steps) {
+  // the project's own steps, or devkit's changed:
+  // ["ruff"] { glob = List("**/*.py"); check = "ruff check {{files}}" }
+})
