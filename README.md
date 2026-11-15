@@ -19,7 +19,8 @@ mise run hooks                                # once per clone: pre-commit check
 - pages, as `uwiki ls` lists them so uwiki.toml excludes hold for each:
   uwiki check, markdownlint, typos, Vale with proselint
 - every file: trailing whitespace, final newline, line endings, BOM, merge conflict markers,
-  names differing only in case, files over 500 kB, broken symlinks, shellcheck, gitleaks for secrets
+  names differing only in case, broken symlinks, shellcheck, gitleaks for secrets
+- pre-commit also: files added over 500 kB
 
 On demand: `mise run links` checks external links with lychee, `mise run secrets` runs gitleaks over git history.
 `mise run fix` fixes what markdownlint, typos and the hygiene steps can; the hook never rewrites.
