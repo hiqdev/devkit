@@ -1,0 +1,27 @@
+# devkit's own tools and tasks; the lint and release ones are devkit's, from its own template, in
+# .config/mise/conf.d/devkit.toml: mise merges both. `mise tasks` lists them.
+
+[tools]
+"pipx:hiqsol/uwiki" = "0.31.0"            # the docs vault's checks; bump: mise use pipx:hiqsol/uwiki@X
+
+[env]
+_.path = ["{{config_root}}/.venv/bin"]    # this checkout's devkit and its copier, `mise run venv` installs them
+
+[tasks.venv]
+description = "install this checkout's devkit into .venv, editable"
+run = "uv sync -q"
+
+[tasks.unit]
+description = "the devkit command's unit tests, fake mise and uwiki on PATH"
+depends = ["venv"]
+run = "python -m unittest discover -s tests"
+
+[tasks.test]
+description = "unit tests, then test.sh renders the template as projects and lints each; mise run patch runs it"
+depends = ["unit"]
+run = "sh test.sh"
+
+[tasks.self]
+description = "devkit applied to itself: render this checkout's template over devkit's own copies of its files"
+depends = ["venv"]
+run = "copier copy -q --trust --defaults --overwrite --vcs-ref HEAD --data-file .copier-answers.yml . ."

@@ -1,0 +1,34 @@
+[project]
+name = "devkit"
+dynamic = ["version"]
+description = "Standard tasks for my projects: lint, fix, links, secrets, hooks and releases, the same in each"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Andrii Vasyliev", email = "sol@hiqdev.com" }]
+requires-python = ">=3.11"
+dependencies = ["copier>=9.4,<10"]
+
+[project.urls]
+Homepage = "https://github.com/hiqdev/devkit"
+
+[project.scripts]
+devkit = "devkit.cli:main"
+
+[tool.hatch.version]
+path = "src/devkit/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/devkit"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uwiki]
+exclude = ["template", "tests"]           # the vault is README.md and docs/
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["B", "I", "UP", "SIM"]

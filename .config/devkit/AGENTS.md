@@ -1,0 +1,25 @@
+<!-- Managed by devkit (github.com/hiqdev/devkit): `devkit update` rewrites it, change the template instead. -->
+# Lint, hooks and releases: devkit
+
+This project's checks and tasks come from devkit, a copier template. [mise](https://mise.jdx.dev) pins
+the tools and runs the tasks, [hk](https://hk.jdx.dev) runs the checks. Nothing needs the `devkit`
+command but setting up and updating.
+
+- `mise run lint` before a commit: every check, as CI and the pre-commit hook run them.
+  `mise run fix` fixes what markdownlint and the hygiene steps can; typos and Vale findings take a person.
+- `mise tasks` lists the tasks; `mise tasks --hidden` also the `devkit:*` helpers they run.
+- `mise run links` checks external links, `mise run secrets` the git history: on demand, not gates.
+- Releases: `mise run patch` (or `minor`, `major`) tests, bumps `src/devkit/__init__.py`, commits and tags;
+  `mise run release` pushes master and the tag, CI publishes; `mise run up` installs it locally.
+
+Files that say "Managed by devkit" are devkit's: `.config/devkit/`, `.config/mise/conf.d/devkit.toml`,
+`.config/mise/tasks/devkit/` and the CI files. Leave them as they are, `devkit update` rewrites them.
+The project's own, devkit writes once and never again:
+
+- `mise.toml`: tools and tasks; a task there overrides devkit's of the same name.
+- `hk.pkl`: steps, devkit's changed or the project's own.
+- `.markdownlint.yaml`, `_typos.toml`: rules on top of devkit's; `.vale.ini` is devkit's, but an update
+  keeps the project's own lines in it.
+- `.vale/styles/config/vocabularies/Wiki/accept.txt`: words Vale takes as spelled right.
+
+A finding on a word that is right goes into `accept.txt` (Vale) or `_typos.toml` (typos), not around it.

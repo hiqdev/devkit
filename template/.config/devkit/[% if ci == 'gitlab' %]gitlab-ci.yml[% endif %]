@@ -1,0 +1,56 @@
+# Managed by devkit (github.com/hiqdev/devkit): `devkit update` rewrites it, change the template instead.
+# Hidden jobs running devkit's tasks with the tools mise pins, the same checks as `mise run lint` and the hook.
+# The project's .gitlab-ci.yml stays its own: it includes this file and names the jobs it wants, with its
+# own stages, rules and runner tags:
+#
+#   include:
+#     - local: .config/devkit/gitlab-ci.yml
+#   lint:
+#     extends: .devkit-lint
+#     stage: test
+#   links:                          # on a schedule, never a gate
+#     extends: .devkit-links
+#     rules:
+#       - if: $CI_PIPELINE_SOURCE == "schedule"
+
+.devkit:
+  image: jdxcode/mise:2026.11.9-debian
+  variables:
+    MISE_DATA_DIR: $CI_PROJECT_DIR/.cache/mise   # inside the project, where GitLab caches can reach it
+    MISE_YES: "1"
+  cache:
+    key:
+      files: [.config/mise/conf.d/devkit.toml, mise.toml]
+    paths: [.cache/mise]
+  before_script:
+    - command -v git >/dev/null || { apt-get update -qq && apt-get install -qq -y git >/dev/null; }
+    - git config --global --add safe.directory "$CI_PROJECT_DIR"
+    - echo /.cache/ >> .git/info/exclude         # the tools are no files to lint
+    - mise trust -q mise.toml && mise trust -q .config/mise/conf.d/devkit.toml
+    - mise install
+    - export PATH="$MISE_DATA_DIR/shims:$PATH"   # the tools for the job's own commands too: npm ci
+
+# pages: uwiki check, markdownlint, typos, Vale; repo: hygiene, shellcheck, gitleaks.
+# The JUnit report shows each hk step in the merge request.
+.devkit-lint:
+  extends: .devkit
+  script:
+    - mise run lint -- --junit-xml hk-junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: hk-junit.xml
+
+# external links alive: other people's servers, so on a schedule or on demand, never a gate
+.devkit-links:
+  extends: .devkit
+  script:
+    - mise run links
+
+# secrets anywhere in git history: needs the whole history, not a shallow clone
+.devkit-secrets:
+  extends: .devkit
+  variables:
+    GIT_DEPTH: "0"
+  script:
+    - mise run secrets

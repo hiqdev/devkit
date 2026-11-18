@@ -1,0 +1,4 @@
+# words typos takes for misspellings in devkit's docs: the examples of what it got wrong
+[default.extend-words]
+payed = "payed"
+thr = "thr"

@@ -1,0 +1,2 @@
+# This project's markdownlint rules on top of devkit's; devkit writes it once and leaves it to the project.
+extends: .config/devkit/markdownlint.yaml

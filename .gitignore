@@ -1,0 +1,6 @@
+__pycache__/
+*.egg-info/
+.venv/
+dist/
+# installs resolve copier fresh from pyproject.toml, so the tests take the latest too, not a locked one
+uv.lock

@@ -1,0 +1,18 @@
+# devkit's own: the command's unit tests, then test.sh checks devkit's copies of its template's files and
+# renders the template as projects and lints them. lint.yml and release.yml are devkit's, from its template.
+name: test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0                  # copier renders HEAD and names it by git describe
+      - uses: jdx/mise-action@v5
+      - run: mise run test

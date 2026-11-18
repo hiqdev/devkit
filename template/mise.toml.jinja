@@ -1,8 +1,13 @@
 # This project's own tools and tasks; devkit's are in .config/mise/conf.d/devkit.toml, mise merges both.
 # devkit writes it once and leaves it to the project.
+[%- if uwiki != 'checkout' %]
+
+[tools]
+"pipx:hiqsol/uwiki" = "[[ uwiki ]]"       # the wiki tool lint runs; bump: mise use pipx:hiqsol/uwiki@X
+[%- endif %]
 [%- if releases == 'python' %]
 
 [tasks.test]
 description = "run tests"
-run = "echo 'define the test task in mise.toml' >&2; exit 1"   # patch, minor, major run it before tagging
+run = "echo 'define the test task in mise.toml' >&2; exit 1"   # mise run patch runs it before tagging
 [%- endif %]

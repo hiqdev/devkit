@@ -1,0 +1,13 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v0.2.1-1-g06616c3
+_src_path: .
+branch: master
+ci: github
+command: devkit
+package: pipx:hiqdev/devkit
+python: true
+releases: python
+uwiki: 0.31.0
+vault: .
+version_file: src/devkit/__init__.py
+wrap: false
