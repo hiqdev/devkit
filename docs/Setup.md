@@ -37,7 +37,7 @@ Then it lists what the project has that devkit does now:
 - **`.pre-commit-config.yaml`:** its checks become `hk.pkl` steps, or are devkit's already.
 - **`lychee*.toml`:** devkit's `.config/devkit/lychee.toml` takes over.
 
-`mise.toml` needs a uwiki pin if it had none: `mise use pipx:hiqsol/uwiki@X`. Then:
+`mise.toml` needs a uwiki pin if it had none: `mise use pipx:hiqsol/uwiki@vX`. Then:
 
 1. `mise run check` and fix what it finds. A finding in many files at once is usually one rule that does not fit:
    change it in the project's file, see [A project's own](Customizing.md).
@@ -54,7 +54,7 @@ copier records the answers in `.copier-answers.yml`; `devkit update -d KEY=VALUE
 | question | default | |
 |---|---|---|
 | `vault` | `.` | folder uwiki checks as the vault, from the project root |
-| `uwiki` | `0.31.0` | uwiki release `mise.toml` pins at first; `checkout` in uwiki's own repo runs its `.venv` |
+| `uwiki` | `0.31.1` | uwiki release `mise.toml` pins at first; `checkout` in uwiki's own repo runs its `.venv` |
 | `ci` | `github` | `github` writes a workflow, `gitlab` hidden jobs `.gitlab-ci.yml` extends, or `none` |
 | `wrap` | `false` | lint checks paragraphs and list items are wrapped: `uwiki wrap --check` |
 | `python` | `false` | lint runs `ruff check` and `ruff format --check`, rules in `.config/devkit/ruff.toml`, which `pyproject.toml` extends |

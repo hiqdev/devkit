@@ -56,7 +56,7 @@ check() {
 }
 
 render wiki
-grep -q 'pipx:hiqsol/uwiki' "$tmp/wiki/mise.toml"
+grep -q '"pipx:hiqsol/uwiki" = "v[0-9]' "$tmp/wiki/mise.toml"   # by its tag, which mise installs the day it is out
 check wiki
 # check is lint and test: a project without tests passes, warned there are none
 at wiki sh -c 'mise run -q check >check.log 2>&1' || { cat "$tmp/wiki/check.log" >&2; exit 1; }

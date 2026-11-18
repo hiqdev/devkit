@@ -23,6 +23,14 @@ latest template. The project pins no devkit, so nothing in it holds an older one
 copier never writes the project's files on update: a change devkit's release notes ask for there is made by
 hand, as the 0.3.0 notes below tell.
 
+## 0.3.4
+
+- **GitLab jobs on a fresh clone:** the jobs make `.git/info` before they write `.cache/` there; a runner
+  whose clone had none failed before lint.
+- **uwiki pinned by its tag:** `vX.Y.Z`, as uwiki tags its releases. mise installs a tag the day it is out,
+  a bare version only once mise's list of versions has it. A project's own `"X.Y.Z"` pin stays: change it
+  with `mise use pipx:hiqsol/uwiki@vX.Y.Z`, the next bump at the latest. A new project starts on 0.31.1.
+
 ## 0.3.3
 
 - **GitLab `.devkit-check`:** lint with its JUnit report, then the project's `test` task; both run, the job
@@ -59,7 +67,7 @@ hand, as the 0.3.0 notes below tell.
   `AGENTS.md` points there, an existing one adds a line that does.
 - **doctor finds devkit's files edited**, which the next update would undo.
 - **uwiki is the project's:** `mise.toml` pins it, `devkit update` moves the pin there from the answers.
-  Bump with `mise use pipx:hiqsol/uwiki@X`; 0.30.0 or later.
+  Bump with `mise use pipx:hiqsol/uwiki@vX`; 0.30.0 or later.
 - **Lint takes the pages uwiki reads**, gitignored private ones too: `devkit:files`. A private folder may
   have findings no check saw before.
 - **gitleaks over what git sees:** `devkit:leaks`, a local `.env` is no leak.

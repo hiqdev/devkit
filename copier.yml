@@ -31,7 +31,7 @@ vault:
 
 uwiki:
   type: str
-  default: "0.31.0"
+  default: "0.31.1"
   help: "uwiki release mise.toml pins at first, the project's to bump later; checkout in uwiki's own repo runs its .venv"
 
 ci:

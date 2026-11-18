@@ -71,7 +71,7 @@ follow it.
 
 In `mise.toml`, which mise takes over `devkit.toml`:
 
-- **uwiki:** `mise use pipx:hiqsol/uwiki@X`; 0.30.0 or later.
+- **uwiki:** `mise use pipx:hiqsol/uwiki@vX`; 0.30.0 or later.
 - **another version of a devkit tool:** pin it in `mise.toml`, `typos = "1.53.0"`. Drop the line when devkit
   catches up, or it stays behind.
 - **the project's own tools:** `node`, `python`, as any mise project.

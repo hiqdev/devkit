@@ -53,7 +53,8 @@ lint:
 
 The tools are cached in `.cache/mise` inside the project, keyed on `devkit.toml` and `mise.toml`: a pin change
 fetches again. A cold cache needs the runner to reach GitHub, npm and PyPI. `.cache/` goes to
-`.git/info/exclude`, so lint does not take the tools for files.
+`.git/info/exclude`, so lint does not take the tools for files; the job makes `.git/info` when a runner's clone
+has none.
 
 ## A job by hand
 

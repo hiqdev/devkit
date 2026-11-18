@@ -2,7 +2,7 @@
 # .config/mise/conf.d/devkit.toml: mise merges both. `mise tasks` lists them.
 
 [tools]
-"pipx:hiqsol/uwiki" = "0.31.0"            # the docs vault's checks; bump: mise use pipx:hiqsol/uwiki@X
+"pipx:hiqsol/uwiki" = "v0.31.1"            # the docs vault's checks; bump: mise use pipx:hiqsol/uwiki@vX
 
 [env]
 _.path = ["{{config_root}}/.venv/bin"]    # this checkout's devkit and its copier, `mise run venv` installs them

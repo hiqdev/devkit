@@ -25,7 +25,8 @@
   before_script:
     - command -v git >/dev/null || { apt-get update -qq && apt-get install -qq -y git >/dev/null; }
     - git config --global --add safe.directory "$CI_PROJECT_DIR"
-    - echo /.cache/ >> .git/info/exclude         # the tools are no files to lint
+    # the tools are no files to lint; a runner's fresh clone may have no .git/info
+    - mkdir -p .git/info && echo /.cache/ >> .git/info/exclude
     - mise trust -q mise.toml && mise trust -q .config/mise/conf.d/devkit.toml
     - mise install
     - export PATH="$MISE_DATA_DIR/shims:$PATH"   # the tools for the job's own commands too: npm ci

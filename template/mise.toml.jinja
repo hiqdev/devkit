@@ -3,5 +3,5 @@
 [%- if uwiki != 'checkout' %]
 
 [tools]
-"pipx:hiqsol/uwiki" = "[[ uwiki ]]"       # the wiki tool lint runs; bump: mise use pipx:hiqsol/uwiki@X
+"pipx:hiqsol/uwiki" = "v[[ uwiki.lstrip("v") ]]"   # the wiki tool lint runs; bump: mise use pipx:hiqsol/uwiki@vX
 [%- endif %]

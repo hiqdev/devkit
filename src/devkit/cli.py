@@ -211,8 +211,8 @@ def pin_uwiki(a: dict[str, str]) -> None:
     a project updated from before gets the version it had there."""
     version = a.get("uwiki", "")
     if version and version != "checkout" and not uwiki_pinned():
-        run("mise", "use", "-q", "--path", "mise.toml", f"pipx:hiqsol/uwiki@{version}")
-        print(f"mise.toml pins uwiki {version} now, the project's to bump: mise use pipx:hiqsol/uwiki@X")
+        run("mise", "use", "-q", "--path", "mise.toml", f"pipx:hiqsol/uwiki@v{version.lstrip('v')}")
+        print(f"mise.toml pins uwiki {version} now, the project's to bump: mise use pipx:hiqsol/uwiki@vX")
 
 
 # --- doctor -------------------------------------------------------------------------------------
@@ -305,7 +305,7 @@ def doctor(network: bool = True) -> tuple[list[str], list[str]]:
         problems.append(f"tools not installed: {', '.join(missing)}; mise install")
 
     if a.get("uwiki") != "checkout" and not uwiki_pinned():
-        problems.append("mise.toml pins no uwiki: mise use pipx:hiqsol/uwiki@X")
+        problems.append("mise.toml pins no uwiki: mise use pipx:hiqsol/uwiki@vX")
     try:
         got = semver(out("uwiki", "--version", check=False).split()[-1])
     except (Fail, IndexError):
@@ -313,7 +313,7 @@ def doctor(network: bool = True) -> tuple[list[str], list[str]]:
     if got and got < UWIKI_MIN:
         problems.append(
             f"uwiki {'.'.join(map(str, got))}: the page steps need {'.'.join(map(str, UWIKI_MIN))} "
-            "or later (uwiki ls --only); mise use pipx:hiqsol/uwiki@X"
+            "or later (uwiki ls --only); mise use pipx:hiqsol/uwiki@vX"
         )
     if hooks_path():
         problems.append(

@@ -8,8 +8,8 @@
 |---|---|---|
 | `mise.toml untrusted` | mise ignores a config it does not trust, its tools and tasks are missing | `mise trust mise.toml` |
 | `tools not installed` | a fresh clone, or a pin changed | `mise install` |
-| `mise.toml pins no uwiki` | a project from before 0.3.0, or the line was dropped | `mise use pipx:hiqsol/uwiki@X` |
-| `uwiki 0.29.0: the page steps need 0.30.0` | the page steps run `uwiki ls --only` | `mise use pipx:hiqsol/uwiki@X` |
+| `mise.toml pins no uwiki` | a project from before 0.3.0, or the line was dropped | `mise use pipx:hiqsol/uwiki@vX` |
+| `uwiki 0.29.0: the page steps need 0.30.0` | the page steps run `uwiki ls --only` | `mise use pipx:hiqsol/uwiki@vX` |
 | `core.hooksPath is .githooks` | git runs those hooks, hk's never | `git config --unset core.hooksPath`, `mise run hooks` |
 | `no hk pre-commit hook` | a fresh clone: hooks are not cloned | `mise run hooks` |
 | `mise tasks named like devkit commands` | `devkit NAME` runs the command | `mise run NAME`, or rename the task |
