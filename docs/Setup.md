@@ -15,7 +15,7 @@ hk and the scripts devkit wrote into it, so a clone needs `mise install` only, a
 
 ```sh
 git init && devkit init       # asks the questions below, copies the files, mise trust, mise install, the hook
-mise run lint                 # every check, green on a fresh project
+mise run check                # every check, green on a fresh project: no tests yet, a warning says so
 git add -A && git commit -m 'devkit'
 ```
 
@@ -39,7 +39,7 @@ Then it lists what the project has that devkit does now:
 
 `mise.toml` needs a uwiki pin if it had none: `mise use pipx:hiqsol/uwiki@X`. Then:
 
-1. `mise run lint` and fix what it finds. A finding in many files at once is usually one rule that does not fit:
+1. `mise run check` and fix what it finds. A finding in many files at once is usually one rule that does not fit:
    change it in the project's file, see [A project's own](Customizing.md).
 2. CI: the GitHub workflow needs nothing more, a GitLab project names devkit's jobs, see [CI](CI.md).
 3. `devkit doctor` until it reports no problem.
@@ -57,7 +57,7 @@ copier records the answers in `.copier-answers.yml`; `devkit update -d KEY=VALUE
 | `uwiki` | `0.31.0` | uwiki release `mise.toml` pins at first; `checkout` in uwiki's own repo runs its `.venv` |
 | `ci` | `github` | `github` writes a workflow, `gitlab` hidden jobs `.gitlab-ci.yml` extends, or `none` |
 | `wrap` | `false` | lint checks paragraphs and list items are wrapped: `uwiki wrap --check` |
-| `python` | `false` | lint runs `ruff check` and `ruff format --check`, rules in `pyproject.toml` |
+| `python` | `false` | lint runs `ruff check` and `ruff format --check`, rules in `.config/devkit/ruff.toml`, which `pyproject.toml` extends |
 | `releases` | `none` | `python`: the release commands, see [Releases](Releases.md) |
 | `version_file` | `src/NAME/__init__.py` | with `releases = python`: holds `__version__ = "X.Y.Z"` |
 | `package` | `pipx:hiqsol/NAME` | with `releases = python`: the mise package `mise run up` installs |
@@ -74,5 +74,5 @@ The command runs these, for a machine without it:
 uvx copier copy --trust gh:hiqdev/devkit .
 mise trust mise.toml && mise trust .config/mise/conf.d/devkit.toml && mise install
 mise run hooks
-mise run lint
+mise run check
 ```

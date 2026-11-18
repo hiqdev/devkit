@@ -5,9 +5,3 @@
 [tools]
 "pipx:hiqsol/uwiki" = "[[ uwiki ]]"       # the wiki tool lint runs; bump: mise use pipx:hiqsol/uwiki@X
 [%- endif %]
-[%- if releases == 'python' %]
-
-[tasks.test]
-description = "run tests"
-run = "echo 'define the test task in mise.toml' >&2; exit 1"   # mise run patch runs it before tagging
-[%- endif %]

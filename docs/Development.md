@@ -16,7 +16,7 @@
 devkit is a project of its own template, with `releases = python` and `python = true`: its lint checks the
 docs, the command, `test.sh`, and its releases are `mise run patch` and `mise run release`. The template lives in
 `template/`, so devkit's copies of its files sit at the root next to it, as in any project:
-`.config/devkit/`, `.config/mise/conf.d/devkit.toml`, `.github/workflows/lint.yml` and `release.yml`,
+`.config/devkit/`, `.config/mise/conf.d/devkit.toml`, `.github/workflows/check.yml` and `release.yml`,
 `.vale.ini`; and the ones written once, `mise.toml` and `hk.pkl`.
 
 One thing differs: `.copier-answers.yml` has `_src_path: .`, the template is this checkout: `devkit update`
@@ -34,6 +34,7 @@ devkit's tasks, `mise.toml`:
 |---|---|
 | `mise run unit` | the command's unit tests |
 | `mise run test` | `unit`, then `test.sh` |
+| `mise run check` | `lint` and `test`, as `check.yml` and `patch` run them |
 | `mise run self` | the template over devkit's own copies of its files |
 | `mise run lint`, `fix`, `hooks` | as in any project |
 | `mise run minor`, `mise run release` | a devkit release, see [releasing devkit](#releasing-devkit) |
@@ -79,7 +80,7 @@ devkit's tasks, `mise.toml`:
 Lint runs with no `devkit` on PATH, and no rendered file may run the command: a project needs none.
 
 `test.sh` renders this checkout, changes not committed too: copier takes a dirty template's working tree.
-It needs mise and uv. CI runs `mise run test` in `test.yml`, `mise run lint` in `lint.yml`.
+It needs mise and uv. CI runs `mise run check` in `check.yml`: lint, then `mise run test`.
 
 ## Trying a change
 
@@ -91,9 +92,9 @@ commit. copier refuses a dirty project, so try it on a clone and move the diff o
 ## Releasing devkit
 
 1. a section in [Updating](Updating.md) for the release
-2. `mise run minor`, or patch, major: runs `mise run test`, sets `__version__` in `src/devkit/__init__.py`,
+2. `mise run minor`, or patch, major: runs `mise run check`, sets `__version__` in `src/devkit/__init__.py`,
    commits `vX.Y.Z` and tags it
-3. `mise run release`: pushes master and the tag at once; `release.yml` tests again and creates the GitHub
+3. `mise run release`: pushes master and the tag at once; `release.yml` checks again and creates the GitHub
    release, and `mise install pipx:hiqdev/devkit@vX.Y.Z` works anywhere
 4. `mise run up`: the release on this machine, for `devkit init` in new projects
 

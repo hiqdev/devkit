@@ -19,10 +19,10 @@ _skip_if_exists:
   - hk.pkl
   - .markdownlint.yaml
   - .vale/styles/config/vocabularies/Wiki/accept.txt
-  - AGENTS.md
+  - /AGENTS.md                   # the project root's; .config/devkit/AGENTS.md is devkit's
 _message_after_copy: |
-  Next: mise run lint; devkit doctor says what keeps it from running. Without the devkit command:
-  mise trust && mise install && mise run lint, then mise run hooks for the pre-commit hook.
+  Next: mise run check; devkit doctor says what keeps it from running. Without the devkit command:
+  mise trust && mise install && mise run check, then mise run hooks for the pre-commit hook.
 
 vault:
   type: str
@@ -38,7 +38,7 @@ ci:
   type: str
   default: github
   choices: [github, gitlab, none]
-  help: "CI that runs mise run lint: github writes a workflow, gitlab hidden jobs .gitlab-ci.yml extends"
+  help: "CI that runs mise run check: github writes a workflow, gitlab hidden jobs .gitlab-ci.yml extends"
 
 wrap:
   type: bool
@@ -48,7 +48,7 @@ wrap:
 python:
   type: bool
   default: false
-  help: Python code checked with ruff check and ruff format --check; rules in pyproject.toml
+  help: Python code checked with ruff check and ruff format --check; rules in .config/devkit/ruff.toml, pyproject.toml extends it
 
 releases:
   type: str

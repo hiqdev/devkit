@@ -78,6 +78,15 @@ class Passthrough(Repo):
         self.assertIn(".githooks", hints)
         self.assertIn("lychee-external.toml", hints)
 
+    def test_ruff_unextended(self):
+        self.write(cli.RUFF, "line-length = 120\n")
+        self.assertIsNone(cli.ruff_unextended({"python": "false"}))
+        self.assertIn("extend", cli.ruff_unextended({"python": "true"}))
+        self.write("pyproject.toml", "[tool.ruff]\nline-length = 100\n")
+        self.assertIn("extend", cli.ruff_unextended({"python": "true"}))
+        self.write("pyproject.toml", f'[tool.ruff]\nextend = "{cli.RUFF}"\n')
+        self.assertIsNone(cli.ruff_unextended({"python": "true"}))
+
 
 class Drift(Repo):
     """A project rendered from this checkout's template: doctor finds devkit's files edited or removed."""

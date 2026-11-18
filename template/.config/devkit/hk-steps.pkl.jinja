@@ -46,7 +46,7 @@ steps: Mapping<String, Config.Step> = new {
 [%- endif %]
 [%- if python %]
 
-  // code: ruff, rules in pyproject.toml; devkit's scripts left out, devkit checks them with its own rules
+  // code: ruff, rules in .config/devkit/ruff.toml, which pyproject.toml extends; devkit's scripts left out, devkit checks them with its own rules
   ["ruff"] {
     glob = List("**/*.py", "**/*.pyi")
     exclude = devkitScripts

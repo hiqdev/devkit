@@ -8,9 +8,9 @@ behind them. The command sets it up, updates it and checks it, and nothing else:
 hooks and releases with mise and hk alone, no devkit installed. Each project runs the same checks the
 same way:
 
-- locally: `mise run lint`, or `mise run lint`, which runs it
-- before each commit: the git pre-commit hook hk installs, over the staged files
-- in CI: a job running `mise run lint`, with the tools at the versions the project pins
+- locally: `mise run check`, lint and the project's tests; `mise run lint` alone
+- before each commit: the git pre-commit hook hk installs, lint over the staged files
+- in CI: a job running `mise run check`, with the tools at the versions the project pins
 
 ## Layers
 
@@ -24,7 +24,7 @@ same way:
 | answers the scripts take | `devkit.toml` `[env]`: `DEVKIT_VAULT`, the release ones | devkit |
 | agents' guide | `.config/devkit/AGENTS.md`, which `AGENTS.md` points to | devkit |
 | command | `devkit` init, update, doctor; installed once per machine, not in the project | devkit |
-| CI | `.github/workflows/lint.yml`, `.config/devkit/gitlab-ci.yml` | devkit |
+| CI | `.github/workflows/check.yml`, `.config/devkit/gitlab-ci.yml` | devkit |
 | the project's checks and tasks | `hk.pkl` steps, `mise.toml` tasks, `.gitlab-ci.yml` jobs | project |
 
 [mise](https://mise.jdx.dev) merges `mise.toml` with `conf.d/devkit.toml`, and takes `mise.toml` where both pin
@@ -38,7 +38,7 @@ to add its own or change some.
 | `.config/devkit/`: hk steps and settings, GitLab jobs, lychee and base markdownlint config | `mise.toml`: uwiki's version, its own tools and tasks |
 | `.config/mise/conf.d/devkit.toml`: tools and tasks | `hk.pkl`: hk settings, excludes, its own steps |
 | `.config/mise/tasks/devkit/`: the scripts behind the tasks | `AGENTS.md`: points agents to devkit's guide |
-| `.github/workflows/lint.yml`, `release.yml` | `.markdownlint.yaml`: its rules on top of devkit's |
+| `.github/workflows/check.yml`, `release.yml` | `.markdownlint.yaml`: its rules on top of devkit's |
 | `.vale.ini`, merged: the project's own lines stay | `.vale/styles/config/vocabularies/Wiki/`: its words |
 | `.copier-answers.yml`: the answers and the template release | `_typos.toml`, `.gitleaks.toml`, `uwiki.toml` when it needs them |
 
@@ -48,8 +48,8 @@ the project's file next to it.
 
 ## Rules devkit keeps
 
-- **One implementation.** The mise tasks are the checks. `mise run lint`, CI and the hook run them, so a
-  green `mise run lint` before a push means a green CI.
+- **One implementation.** The mise tasks are the checks. `mise run check`, CI and the hook run them, so a
+  green `mise run check` before a push means a green CI.
 - **The project runs on its own files.** Lint, the hook, CI and releases run mise, hk and the scripts
   devkit wrote into the project. The `devkit` command sets up and updates, so no installed devkit can be
   missing or another version than the project's files.

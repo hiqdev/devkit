@@ -17,11 +17,24 @@ latest template. The project pins no devkit, so nothing in it holds an older one
 1. `git diff` and the compare link: what changed
 2. resolve each `<<<<<<<` conflict; one in a file devkit owns usually takes devkit's side, the project's
    change belongs in its own file
-3. `devkit doctor`, `mise run lint`
+3. `devkit doctor`, `mise run check`
 4. commit, `devkit vX.Y.Z` as the message
 
 copier never writes the project's files on update: a change devkit's release notes ask for there is made by
 hand, as the 0.3.0 notes below tell.
+
+## 0.3.2
+
+- **`check` is every check:** `lint` and `test`. CI, `patch` and the release workflow run it, so a lint
+  failure stops a release before its tag. `test` is the project's, in `mise.toml`; devkit's warns there are
+  no tests, or fails with Python. A project's own task named `check` overrides devkit's: rename it.
+- **`.github/workflows/check.yml` replaces `lint.yml`:** copier removes `lint.yml`. A project's own
+  `test.yml` stays, a test matrix for one.
+- **ruff rules in `.config/devkit/ruff.toml`**, with `python`: 120 columns, B, I, UP, SIM. Add
+  `extend = ".config/devkit/ruff.toml"` to `pyproject.toml` `[tool.ruff]` by hand, `devkit doctor` notes it
+  until then; the project's own ruff rules stay there, on top.
+- **`.config/devkit/AGENTS.md` updates:** copier skipped it as the project's `AGENTS.md`; now only the
+  project root's is the project's.
 
 ## 0.3.1
 

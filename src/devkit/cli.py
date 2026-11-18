@@ -23,6 +23,7 @@ ANSWERS = ".copier-answers.yml"
 MISE_CONFIGS = ("mise.toml", ".config/mise/conf.d/devkit.toml")
 COMMANDS = ("init", "update", "doctor")
 AGENTS = ".config/devkit/AGENTS.md"
+RUFF = ".config/devkit/ruff.toml"  # with python: the rules a project's ruff config extends
 MERGED = "keeping the project's own lines"  # the header of a devkit file a project adds its own lines to
 SEMVER = re.compile(r"v?(\d+)\.(\d+)\.(\d+)")
 UWIKI_MIN = (0, 30, 0)  # uwiki ls --only, which the page steps run
@@ -120,6 +121,20 @@ def migration_hints() -> list[str]:
     return hints
 
 
+def ruff_unextended(a: dict[str, str]) -> str | None:
+    """With python, a project whose ruff config does not extend devkit's takes other rules locally than in
+    CI: ruff falls back to ~/.config/ruff on a laptop, to its defaults on a runner."""
+    if a.get("python") != "true" or not Path(RUFF).exists():
+        return None
+    for f in ("pyproject.toml", "ruff.toml", ".ruff.toml"):
+        if Path(f).exists() and RUFF in Path(f).read_text(errors="replace"):
+            return None
+    return (
+        f"no ruff config extends {RUFF}: ruff takes other rules here than in CI; "
+        f'pyproject.toml [tool.ruff] extend = "{RUFF}"'
+    )
+
+
 def cmd_init(args) -> int:
     if Path(ANSWERS).exists():
         raise Fail(f"{ANSWERS} exists, the project is on devkit already: devkit update")
@@ -134,9 +149,10 @@ def cmd_init(args) -> int:
         unsafe=True,
     )
     setup(hooks=not args.no_hooks)
-    for hint in migration_hints():
-        print(f"- {hint}")
-    print("next: mise run lint, then commit what devkit wrote")
+    for hint in [*migration_hints(), ruff_unextended(answers())]:
+        if hint:
+            print(f"- {hint}")
+    print("next: mise run check, then commit what devkit wrote")
     return 0
 
 
@@ -255,7 +271,8 @@ def drifted(a: dict[str, str]) -> list[tuple[str, str]]:
                 )
         except Exception as e:  # noqa: BLE001  copier's errors, git's, the network's: a note, not a crash
             raise Fail(f"template {src} not rendered at {a.get('_commit')}: {type(e).__name__}") from None
-        own = set(getattr(worker.template, "skip_if_exists", ()) or ())
+        # paths from the project root, as copier.yml anchors them: /AGENTS.md, not .config/devkit/AGENTS.md
+        own = {p.lstrip("/") for p in getattr(worker.template, "skip_if_exists", ()) or ()}
         found = []
         for f in sorted(Path(tmp).rglob("*")):
             rel = f.relative_to(tmp).as_posix()
@@ -309,6 +326,9 @@ def doctor(network: bool = True) -> tuple[list[str], list[str]]:
             problems.append("no hk pre-commit hook: mise run hooks")
 
     notes += migration_hints()
+    ruff = ruff_unextended(a)
+    if ruff:
+        notes.append(ruff)
 
     commit = a.get("_commit", "")
     src = a.get("_src_path", SRC)
@@ -366,8 +386,8 @@ def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="devkit",
         description="Sets up devkit's lint and release tasks in a project, updates and checks them.",
-        epilog="Other commands run the mise task of that name, as mise run does; mise tasks lists them. "
-        "Without a command: these commands and the project's tasks.",
+        epilog="Other commands run the mise task of that name, as mise run does: mise run check is every check, "
+        "mise tasks lists them. Without a command: these commands and the project's tasks.",
     )
     p.add_argument("--version", action="version", version=f"devkit {__version__}")
     sub = p.add_subparsers(dest="command", metavar="COMMAND")

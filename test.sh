@@ -21,7 +21,7 @@ at() { dir=$tmp/$1; shift; (cd "$dir" && PATH=$bare "$@"); }
 
 echo "--- self"
 uvx -q copier copy -q --trust --defaults --vcs-ref HEAD --data-file .copier-answers.yml . "$tmp/self" >/dev/null
-own=$(sed -n '/^_skip_if_exists:/,/^[^ ]/s/^  - //p' copier.yml)
+own=$(sed -n '/^_skip_if_exists:/,/^[^ ]/s/^  - \/\{0,1\}\([^ ]*\).*/\1/p' copier.yml)
 stale=$(cd "$tmp/self" && find . -type f ! -name .copier-answers.yml | sed 's|^\./||' | sort | while read -r f; do
     echo "$own" | grep -qxF "$f" || cmp -s "$f" "$here/$f" || echo "$f"
 done)
@@ -58,6 +58,9 @@ check() {
 render wiki
 grep -q 'pipx:hiqsol/uwiki' "$tmp/wiki/mise.toml"
 check wiki
+# check is lint and test: a project without tests passes, warned there are none
+at wiki sh -c 'mise run -q check >check.log 2>&1' || { cat "$tmp/wiki/check.log" >&2; exit 1; }
+grep -q 'No tests' "$tmp/wiki/check.log" || { echo 'check did not warn of no tests' >&2; exit 1; }
 # doctor: devkit's files as the template renders them, then one edited and one removed
 dk_doctor() { (cd "$tmp/wiki" && dk doctor --offline) || true; }
 dk_doctor | grep -E 'edited|missing' && { echo 'doctor found drift in a fresh project' >&2; exit 1; }
@@ -101,4 +104,8 @@ git -C "$tmp/package" add -A
 [ "$(at package mise run -q devkit:version)" = 0.1.0 ] && [ -e "$tmp/package/.github/workflows/release.yml" ]
 [ ! -e "$tmp/wiki/.config/mise/tasks/devkit/bump.sh" ]   # release scripts only where releases is python
 check package
+# a package's check fails until mise.toml defines its tests
+if at package sh -c 'mise run -q check >check.log 2>&1'; then echo 'check passed a package with no tests' >&2; exit 1; fi
+printf '\n[tasks.test]\nrun = "true"\n' >> "$tmp/package/mise.toml"
+at package sh -c 'mise run -q check >check.log 2>&1' || { cat "$tmp/package/check.log" >&2; exit 1; }
 echo ok

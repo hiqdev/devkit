@@ -1,11 +1,12 @@
 # CI
 
-CI runs `mise run lint`, with the tools at the versions the project pins: what passes locally passes there.
+CI runs `mise run check`, lint and the project's tests, with the tools at the versions the project pins: what
+passes locally passes there.
 
 ## GitHub
 
-`ci = github`: `.github/workflows/lint.yml` runs lint on a push to master or main and on each pull request,
-with [mise-action](https://github.com/jdx/mise-action) installing the tools. It is devkit's, so it needs
+`ci = github`: `.github/workflows/check.yml` runs `mise run check` on a push to master or main and on each pull
+request, with [mise-action](https://github.com/jdx/mise-action) installing the tools. It is devkit's, so it needs
 nothing from the project. With `releases = python` there is `release.yml` too, see [Releases](Releases.md).
 
 ## GitLab

@@ -93,7 +93,7 @@ class Releases(Repo):
         self.assertEqual(r.returncode, 0, r.stderr)
         self.assertEqual(Path("pkg/__init__.py").read_text(), '__version__ = "0.2.0"\n')
         self.assertEqual(self.tags(), ["v0.2.0"])
-        self.assertEqual((self.bin / "mise.log").read_text(), "run test\n")
+        self.assertEqual((self.bin / "mise.log").read_text(), "run check\n")
 
     def test_bump_parts(self):
         for part, want in (("patch", "0.1.1"), ("major", "1.0.0")):

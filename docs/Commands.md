@@ -19,7 +19,9 @@ devkit's tasks, in `devkit.toml`. A task of the same name in `mise.toml` overrid
 
 | task | does |
 |---|---|
-| `lint` | every check over the files lint takes, see [Checks](Checks.md) |
+| `check` | every check: `lint` and `test`, as CI, `patch` and the release workflow run them |
+| `test` | the project's tests, which `mise.toml` defines; devkit's warns there are none, or fails with Python |
+| `lint` | the checks over the files lint takes, see [Checks](Checks.md) |
 | `fix` | fixes what markdownlint, the hygiene steps, wrap and ruff can, then checks the rest |
 | `links` | external links alive with lychee: other people's servers, on demand |
 | `secrets` | gitleaks over the whole git history: a leak stays there after its fix |

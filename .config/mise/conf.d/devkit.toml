@@ -30,6 +30,16 @@ DEVKIT_BRANCH = "master"
 DEVKIT_PACKAGE = "pipx:hiqdev/devkit"
 DEVKIT_COMMAND = "devkit"
 
+# check gates: CI, patch and release run it. test is the project's: mise.toml defines it, devkit's below
+# only says there is none
+[tasks.check]
+description = "every check: lint and the project's tests, as CI runs them"
+depends = ["lint", "test"]
+
+[tasks.test]
+description = "the project's tests: mise.toml defines them, this one fails until it does"
+run = "echo 'No tests: define the test task in mise.toml' >&2; exit 1"
+
 # lint and fix take what git sees and the pages uwiki reads, gitignored ones too: devkit:files lists them
 [tasks.lint]
 description = "pages: uwiki check, markdownlint, typos, Vale; repo: hygiene, shellcheck, gitleaks"
@@ -51,7 +61,7 @@ run = "hk run secrets --all"
 description = "install the git pre-commit hook: checks staged files, rewrites nothing"
 run = "hk install --mise"
 
-# releases of src/devkit/__init__.py: devkit:bump runs the test task (mise.toml has it) first
+# releases of src/devkit/__init__.py: devkit:bump runs check first
 [tasks.patch]
 description = "fixes: 0.2.1 -> 0.2.2, tagged"
 run = "mise run -q devkit:bump patch"

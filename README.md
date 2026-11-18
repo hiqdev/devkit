@@ -11,7 +11,7 @@ mise use -g pipx:hiqdev/devkit   # once per machine
 devkit init                      # new project: a few questions, then the tools and the hook
 devkit update                    # later: merges devkit changes in, keeping the project's own lines
 devkit doctor                    # what keeps lint or the hook from running, what is edited or out of date
-mise run lint                    # every check, as CI and the pre-commit hook run them
+mise run check                   # every check: lint and the project's tests, as CI runs them
 mise tasks                       # the project's tasks, devkit's among them
 ```
 

@@ -2,6 +2,17 @@
 
 A project changes devkit through its own files, never devkit's: `devkit update` rewrites those.
 
+## Its tests
+
+`mise run check` is `lint` and `test`. `test` is the project's: `mise.toml` defines it, and overrides devkit's,
+which warns there are no tests, or fails with `python` or `releases = python`:
+
+```toml
+[tasks.test]
+description = "the unit tests"
+run = "uv run python -m unittest discover tests"
+```
+
 ## Its own steps
 
 In `hk.pkl`, in the mapping it hands `devkit.hooks`. A step of a new name is added, one of devkit's names

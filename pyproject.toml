@@ -28,7 +28,4 @@ build-backend = "hatchling.build"
 exclude = ["template", "tests"]           # the vault is README.md and docs/
 
 [tool.ruff]
-line-length = 120
-
-[tool.ruff.lint]
-extend-select = ["B", "I", "UP", "SIM"]
+extend = ".config/devkit/ruff.toml"       # devkit's rules, from its own template

@@ -33,8 +33,17 @@ is typos'.
 
 ## Code
 
-With `python`: `ruff` (`ruff check`) and `ruff-format` (`ruff format --check`) over `*.py` and `*.pyi`, rules
-in `pyproject.toml` `[tool.ruff]`. Other languages are the project's steps, see
+With `python`: `ruff` (`ruff check`) and `ruff-format` (`ruff format --check`) over `*.py` and `*.pyi`, by the
+rules of `.config/devkit/ruff.toml`: 120 columns, and B, I, UP and SIM on top of ruff's own. The project's
+`pyproject.toml` extends it and adds its rules:
+
+```toml
+[tool.ruff]
+extend = ".config/devkit/ruff.toml"
+```
+
+Without that, ruff takes `~/.config/ruff` on a laptop and its defaults in CI, and the two disagree;
+`devkit doctor` notes it. Other languages are the project's steps, see
 [A project's own](Customizing.md#its-own-steps).
 
 ## Files lint takes
