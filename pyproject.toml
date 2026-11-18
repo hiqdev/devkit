@@ -1,7 +1,7 @@
 [project]
 name = "devkit"
 dynamic = ["version"]
-description = "Standard tasks for my projects: lint, fix, links, secrets, hooks and releases, the same in each"
+description = "Standard tasks for HiQDev projects: lint, fix, links, secrets, hooks and releases, the same in each"
 readme = "README.md"
 license = "MIT"
 authors = [{ name = "Andrii Vasyliev", email = "sol@hiqdev.com" }]

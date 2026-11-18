@@ -1,6 +1,6 @@
 # devkit
 
-Standard tasks for my projects, the same in each: lint, fix, links, secrets, hooks and releases.
+Standard tasks for HiQDev projects, the same in each: lint, fix, links, secrets, hooks and releases.
 [mise](https://mise.jdx.dev) pins the tools and runs the tasks, [hk](https://hk.jdx.dev) runs the checks,
 [copier](https://copier.readthedocs.io) copies them into a project and merges later changes in.
 A project then runs on its own files, mise and hk: no devkit installed in it. The `devkit` command sets

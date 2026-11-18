@@ -1,4 +1,4 @@
-# devkit: standard tasks for my projects, the same in each; mise pins the tools, hk runs the checks.
+# devkit: standard tasks for HiQDev projects, the same in each; mise pins the tools, hk runs the checks.
 # New project: devkit init (mise use -g pipx:hiqdev/devkit), or uvx copier copy --trust gh:hiqdev/devkit .
 # Later: devkit update
 

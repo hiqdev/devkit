@@ -1,4 +1,4 @@
-"""devkit: standard tasks for my projects. Sets them up, updates and checks them.
+"""devkit: standard tasks for HiQDev projects. Sets them up, updates and checks them.
 
 `devkit init` and `devkit update` copy and merge the template with copier, `devkit doctor` says what is
 missing, edited or out of date, and any other command runs the mise task of that name: `devkit lint` is
