@@ -23,6 +23,13 @@ latest template. The project pins no devkit, so nothing in it holds an older one
 copier never writes the project's files on update: a change devkit's release notes ask for there is made by
 hand, as the 0.3.0 notes below tell.
 
+## 0.3.3
+
+- **GitLab `.devkit-check`:** lint with its JUnit report, then the project's `test` task; both run, the job
+  fails when either does. `.devkit-lint` stays, lint alone: a project with tests extends `.devkit-check`.
+- **release says why it refuses:** a version with no tag yet takes `git tag vX.Y.Z` when it was set by hand,
+  a tag on another commit takes a new version.
+
 ## 0.3.2
 
 - **`check` is every check:** `lint` and `test`. CI, `patch` and the release workflow run it, so a lint

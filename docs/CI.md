@@ -19,8 +19,8 @@ runner tags:
 include:
   - local: .config/devkit/gitlab-ci.yml
 
-lint:
-  extends: .devkit-lint
+check:                                     # lint and the tests; .devkit-lint is lint alone
+  extends: .devkit-check
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -35,6 +35,7 @@ links:                                     # on a schedule, never a gate
 | job | runs |
 |---|---|
 | `.devkit` | the base: `jdxcode/mise` image, git, the mise configs trusted, `mise install`, the tools on PATH |
+| `.devkit-check` | `mise run lint` with the JUnit report, then `mise run test`: both run, the job fails when either does |
 | `.devkit-lint` | `mise run lint` with a JUnit report: each hk step shows in the merge request |
 | `.devkit-links` | `mise run links`: external links, for a schedule |
 | `.devkit-secrets` | `mise run secrets`: gitleaks over the whole history, `GIT_DEPTH: 0` |

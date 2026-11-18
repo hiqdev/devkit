@@ -1,12 +1,12 @@
 # Managed by devkit (github.com/hiqdev/devkit): `devkit update` rewrites it, change the template instead.
-# Hidden jobs running devkit's tasks with the tools mise pins, the same checks as `mise run lint` and the hook.
+# Hidden jobs running devkit's tasks with the tools mise pins, the same checks as `mise run check` and the hook.
 # The project's .gitlab-ci.yml stays its own: it includes this file and names the jobs it wants, with its
 # own stages, rules and runner tags:
 #
 #   include:
 #     - local: .config/devkit/gitlab-ci.yml
-#   lint:
-#     extends: .devkit-lint
+#   check:                          # lint and the tests; .devkit-lint is lint alone
+#     extends: .devkit-check
 #     stage: test
 #   links:                          # on a schedule, never a gate
 #     extends: .devkit-links
@@ -40,6 +40,15 @@
     when: always
     reports:
       junit: hk-junit.xml
+
+# lint and the project's test task, as `mise run check`: both run, the job fails when either does
+.devkit-check:
+  extends: .devkit-lint
+  script:
+    - status=0
+    - mise run lint -- --junit-xml hk-junit.xml || status=$?
+    - mise run test || status=1
+    - exit $status
 
 # external links alive: other people's servers, so on a schedule or on demand, never a gate
 .devkit-links:

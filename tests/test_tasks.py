@@ -112,6 +112,16 @@ class Releases(Repo):
         r = self.task("release")
         self.assertNotEqual(r.returncode, 0)
         self.assertIn("not tagged v0.1.0", r.stderr)
+        self.assertIn("git tag v0.1.0", r.stderr)  # a version set by hand, no tag yet
+
+    def test_release_refuses_a_tag_on_another_commit(self):
+        self.git("tag", "v0.1.0")
+        self.write("pkg/other.py")
+        self.git("add", "-A")
+        self.git("commit", "-qm", "later")
+        r = self.task("release")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("tags another commit", r.stderr)
 
     def test_needs_its_env(self):
         del self.env["DEVKIT_VERSION_FILE"]
