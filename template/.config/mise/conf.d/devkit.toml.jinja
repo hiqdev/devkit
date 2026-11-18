@@ -17,6 +17,12 @@ shellcheck = "0.11.0"
 [%- if python %]
 ruff = "0.17.4"
 [%- endif %]
+[%- if uwiki != 'checkout' %]
+
+[settings]
+# uwiki is ours: lint takes its release the day it is out, without mise's 24h minimum_release_age
+minimum_release_age_excludes = ["pipx:hiqsol/uwiki"]
+[%- endif %]
 
 [env]
 HK_MISE = "1"                             # git hooks run hk through mise, with the tools above

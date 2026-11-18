@@ -23,6 +23,11 @@ latest template. The project pins no devkit, so nothing in it holds an older one
 copier never writes the project's files on update: a change devkit's release notes ask for there is made by
 hand, as the 0.3.0 notes below tell.
 
+## 0.3.1
+
+- **A fresh uwiki installs:** `devkit.toml` exempts `pipx:hiqsol/uwiki` from mise's 24h
+  `minimum_release_age`, so CI takes a uwiki release the day the project pins it.
+
 ## 0.3.0
 
 - **The project runs on its own files:** the tasks run scripts in `.config/mise/tasks/devkit/`, hidden
